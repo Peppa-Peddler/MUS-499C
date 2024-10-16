@@ -10,7 +10,7 @@ s.boot;
 
 (
 x = {
-	var sig, freq, width;
+	var sig, freq, width, freq2;
 	freq = LFSaw.ar(freq: 1/5, iphase: 1).exprange(200, 1500);
 	freq2 = LFNoise0.ar(freq: 40 ! 2).range(1, 100);
 	freq = (freq + freq2).round(50);
@@ -30,7 +30,7 @@ x.free;
 x = {
 	var sig, freq, amp;
 	freq = LFNoise0.ar(freq: 9).exprange(40,500);
-	amp = LFSaw.ar(freq: 9, iphase: 1),range(0, 1).sqrt.neg + 1;
+	amp = LFSaw.ar(freq: 9, iphase: 1).range(0, 1).sqrt.neg + 1;
 	sig = SinOsc.ar(freq: freq, mul: 0.2) * amp;
 	sig = sig ! 2;
 }.play;
@@ -47,7 +47,7 @@ x = {
 	var sig, noiseHz;
 	noiseHz = LFNoise1.ar(freq: 10).exprange(500, 5000);
 	sig = LFDNoise1.ar(freq: noiseHz, mul: 0.08);
-	sig = sig * 0;
+	//sig = sig * 0;
 	sig = sig ! 2;
 }.play;
 )
@@ -62,7 +62,7 @@ x.free;
 x = {
 	var sig, mod;
 	mod = SinOsc.kr(freq: 1/4, phase: 3pi/2).range(0.02, 1);
-	sig = PinkNoise(0.2 ! 2);
+	sig = PinkNoise.ar(0.2 ! 2);
 	sig = sig * mod;
 	sig = sig ! 2;
 }.play;
@@ -74,12 +74,25 @@ x.free;
 // Problem 5.
 // Use the 'plot' method to visualize exactly four complete cycles of a triangle wave whose frequency is 160 Hz. Note that plot accepts several arguments, the first of which is a duration in seconds.
 
-
+(
+	{LFTri.ar(160)}.plot(4/160)
+)
 
 // ----------
 // Problem 6.
 // Create a UGen function that produces a sine wave whose frequency is determined by a linear ramp oscillator (LFSaw). The frequency of the sine wave should go from 200 Hz to 1000 Hz once per second, and the frequency should begin at 200 Hz when the function is played (hint: you'll need to specify the correct initial phase for the ramp oscillator). Read the help files! Add an additional line of code that fades out the sound over 5 seconds (hint: store the played function in a variable and use 'release').
 
+(
+
+x  = {
+	var freq, sig;
+	freq = LFSaw.kr(1, 1, 400, 600);
+	sig = SinOsc.ar(freq, 0, 0.5);
+}.play();
+
+)
+
+x.release(5);
 
 
 // ----------
@@ -90,6 +103,14 @@ x.free;
 
 // You'll have to use your ears to figure out the right numbers. It doesn't have to be perfect — full credit if you're close and demonstrate that you've got the right idea.
 
+(
+
+x = {
+	var freq, sig;
+	freq = SinOsc.ar( SinOsc.kr(1/6).exprange(1400,1000), 0, 1, 1);
+}.play();
+
+)
 
 
 
@@ -101,8 +122,14 @@ x.free;
 
 // Create and play a UGen function that emulates this sound. From a spectral analysis perspective, I will tell you that it contains the following sinusoidal frequencies: [1400, 2060, 2450, 2600] Hz. The rest is up to you!
 
+(
 
+x = {
+	//SinOsc.ar( LFSaw.kr(4, 0, 1400, 1200), 0, 1, 0);
+	LFSaw.ar( SinOsc.kr(4).exprange(2600, 1000), 0, 1, 0);
+}.play();
 
+)
 
 // -------------
 // Bonus Problem
